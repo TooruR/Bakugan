@@ -29,7 +29,7 @@ RAW_B = [
     ("Aquos Fear Ripper", "Aquos", 350), ("Aquos Saurus", "Aquos", 360), ("Preyas II", "Aquos", 430),
     ("Elfin", "Aquos", 400), ("Minx Elfin", "Aquos", 520), ("Elico", "Aquos", 500),
     ("Blast Elico", "Aquos", 600), ("Abis Omega", "Aquos", 420), ("Macubass", "Aquos", 620),
-    ("Tigrerra", "Haos", 340), ("Blade Tigrerra", "Haos", 450), ("Tentaclear", "Haos", 370),
+    ("Tigrerra", "Haos", 340), ("Blade Tigrerra", "Haos', 450" if False else "Haos", 450), ("Tentaclear", "Haos", 370),
     ("Haos Hynoid", "Haos", 310), ("Haos Freezer", "Haos", 330), ("Haos Robotallion", "Haos", 350),
     ("Haos Falconeer", "Haos", 320), ("Haos Saurus", "Haos", 360), ("Nemus", "Haos", 450),
     ("Saint Nemus", "Haos", 550), ("Mega Brontes", "Haos", 480), ("Alto Brontes", "Haos", 560),
@@ -52,40 +52,44 @@ RAW_B = [
 ]
 BAKUGANS = [{'name': x[0], 'element': x[1], 'g': x[2]} for x in RAW_B]
 
-# Карты строго привязаны к стихиям (по несколько на стихию для полноценного выбора)
 GATES = [
-    {'name': 'Огненный Буст', 'elem': 'Pyrus', 'g': 250, 'desc': '+250 G Пайрусу'},
-    {'name': 'Вулкан Пайруса', 'elem': 'Pyrus', 'g': 200, 'desc': '+200 G Пайрусу'},
-    {'name': 'Водный Водоворот', 'elem': 'Aquos', 'g': 220, 'desc': '+220 G Аквосу'},
-    {'name': 'Бездна Аквоса', 'elem': 'Aquos', 'g': 180, 'desc': '+180 G Аквосу'},
-    {'name': 'Священный Свет', 'elem': 'Haos', 'g': 280, 'desc': '+280 G Хаосу'},
-    {'name': 'Сияние Хаоса', 'elem': 'Haos', 'g': 200, 'desc': '+200 G Хаосу'},
-    {'name': 'Тайфун Ветра', 'elem': 'Ventus', 'g': 230, 'desc': '+230 G Вентусу'},
-    {'name': 'Шторм Вентуса', 'elem': 'Ventus', 'g': 190, 'desc': '+190 G Вентусу'},
-    {'name': 'Гравитация Земли', 'elem': 'Subterra', 'g': 240, 'desc': '+240 G Саптере'},
-    {'name': 'Каньон Саптеры', 'elem': 'Subterra', 'g': 200, 'desc': '+200 G Саптере'},
-    {'name': 'Зазеркалье Тьмы', 'elem': 'Darkus', 'g': 260, 'desc': '+260 G Даркусу'},
-    {'name': 'Пропасть Даркуса', 'elem': 'Darkus', 'g': 210, 'desc': '+210 G Даркусу'},
-    {'name': 'Поле Боя (+150 G)', 'elem': 'Any', 'g': 150, 'desc': '+150 G любому'},
-    {'name': 'Арена Силы (+100 G)', 'elem': 'Any', 'g': 100, 'desc': '+100 G любому'}
+    {'name': 'Огненный Буст', 'elem': 'Pyrus', 'g': 250, 'desc': 'Дает +250 G бакугану Пайруса'},
+    {'name': 'Вулкан Пайруса', 'elem': 'Pyrus', 'g': 200, 'desc': 'Дает +200 G бакугану Пайруса'},
+    {'name': 'Водный Водоворот', 'elem': 'Aquos', 'g': 220, 'desc': 'Дает +220 G бакугану Аквоса'},
+    {'name': 'Бездна Аквоса', 'elem': 'Aquos', 'g': 180, 'desc': 'Дает +180 G бакугану Аквоса'},
+    {'name': 'Священный Свет', 'elem': 'Haos', 'g': 280, 'desc': 'Дает +280 G бакугану Хаоса'},
+    {'name': 'Сияние Хаоса', 'elem': 'Haos', 'g': 200, 'desc': 'Дает +200 G бакугану Хаоса'},
+    {'name': 'Тайфун Ветра', 'elem': 'Ventus', 'g': 230, 'desc': 'Дает +230 G бакугану Вентуса'},
+    {'name': 'Шторм Вентуса', 'elem': 'Ventus', 'g': 190, 'desc': 'Дает +190 G бакугану Вентуса'},
+    {'name': 'Гравитация Земли', 'elem': 'Subterra', 'g': 240, 'desc': 'Дает +240 G бакугану Саптеры'},
+    {'name': 'Каньон Саптеры', 'elem': 'Subterra', 'g': 200, 'desc': 'Дает +200 G бакугану Саптеры'},
+    {'name': 'Зазеркалье Тьмы', 'elem': 'Darkus', 'g': 260, 'desc': 'Дает +260 G бакугану Даркуса'},
+    {'name': 'Пропасть Даркуса', 'elem': 'Darkus', 'g': 210, 'desc': 'Дает +210 G бакугану Даркуса'},
+    {'name': 'Поле Боя', 'elem': 'Any', 'g': 150, 'desc': 'Дает +150 G любому бакугану'},
+    {'name': 'Арена Силы', 'elem': 'Any', 'g': 100, 'desc': 'Дает +100 G любому бакугану'}
 ]
 
 ABILS = [
-    {'name': 'Огненный залп (+180 G)', 'elem': 'Pyrus', 'g': 180, 'h': 0},
-    {'name': 'Удар Дракона (+250 G)', 'elem': 'Pyrus', 'g': 250, 'h': 0},
-    {'name': 'Водный Барьер (+160 G)', 'elem': 'Aquos', 'g': 160, 'h': 0},
-    {'name': 'Лечение Океана (+150 HP)', 'elem': 'Aquos', 'g': 0, 'h': 150},
-    {'name': 'Ослепляющий Свет (+190 G)', 'elem': 'Haos', 'g': 190, 'h': 0},
-    {'name': 'Очищение (+200 HP)', 'elem': 'Haos', 'g': 0, 'h': 200},
-    {'name': 'Штормовой Всплеск (+210 G)', 'elem': 'Ventus', 'g': 210, 'h': 0},
-    {'name': 'Воздушный Клинок (+170 G)', 'elem': 'Ventus', 'g': 170, 'h': 0},
-    {'name': 'Каменный Панцирь (+220 G)', 'elem': 'Subterra', 'g': 220, 'h': 0},
-    {'name': 'Землетрясение (+190 G)', 'elem': 'Subterra', 'g': 190, 'h': 0},
-    {'name': 'Теневой Коготь (+230 G)', 'elem': 'Darkus', 'g': 230, 'h': 0},
-    {'name': 'Поглощение (+120G/+100HP)', 'elem': 'Darkus', 'g': 120, 'h': 100},
-    {'name': 'Универсал (+120 G)', 'elem': 'Any', 'g': 120, 'h': 0},
-    {'name': 'Аптечка (+100 HP)', 'elem': 'Any', 'g': 0, 'h': 100}
+    {'name': 'Огненный залп', 'elem': 'Pyrus', 'g': 180, 'h': 0, 'desc': 'Атака пламенем: +180 G'},
+    {'name': 'Удар Дракона', 'elem': 'Pyrus', 'g': 250, 'h': 0, 'desc': 'Мощный рывок: +250 G'},
+    {'name': 'Водный Барьер', 'elem': 'Aquos', 'g': 160, 'h': 0, 'desc': 'Волна защиты: +160 G'},
+    {'name': 'Лечение Океана', 'elem': 'Aquos', 'g': 0, 'h': 150, 'desc': 'Восстанавливает +150 HP игроку'},
+    {'name': 'Ослепляющий Свет', 'elem': 'Haos', 'g': 190, 'h': 0, 'desc': 'Вспышка света: +190 G'},
+    {'name': 'Очищение', 'elem': 'Haos', 'g': 0, 'h': 200, 'desc': 'Исцеление светом: +200 HP игроку'},
+    {'name': 'Штормовой Всплеск', 'elem': 'Ventus', 'g': 210, 'h': 0, 'desc': 'Ураганный порыв: +210 G'},
+    {'name': 'Воздушный Клинок', 'elem': 'Ventus', 'g': 170, 'h': 0, 'desc': 'Режущий ветер: +170 G'},
+    {'name': 'Каменный Панцирь', 'elem': 'Subterra', 'g': 220, 'h': 0, 'desc': 'Укрепление брони: +220 G'},
+    {'name': 'Землетрясение', 'elem': 'Subterra', 'g': 190, 'h': 0, 'desc': 'Раскол арены: +190 G'},
+    {'name': 'Теневой Коготь', 'elem': 'Darkus', 'g': 230, 'h': 0, 'desc': 'Удар из тьмы: +230 G'},
+    {'name': 'Поглощение Тьмы', 'elem': 'Darkus', 'g': 120, 'h': 100, 'desc': 'Вампиризм: +120 G и +100 HP'},
+    {'name': 'Универсал', 'elem': 'Any', 'g': 120, 'h': 0, 'desc': 'Базовое усиление: +120 G'},
+    {'name': 'Аптечка', 'elem': 'Any', 'g': 0, 'h': 100, 'desc': 'Первая помощь: +100 HP игроку'}
 ]
+
+QUIT_BTN = [InlineKeyboardButton(text="🏳️ Выйти в меню", callback_data="quit")]
+
+def b_str(b):
+    return f"{b['name']} ({ELEMS[b['element']]})"
 
 class Player:
     def __init__(self, uid, name, is_bot=False):
@@ -150,22 +154,25 @@ def draft_kb(p: Player):
     if p.stage == 'baku':
         cur = [b for b in BAKUGANS if b['element'] == p.d_elem]
         b = cur[p.d_idx % len(cur)]
-        t = f"🛡️ *НАБОР БАКУГАНОВ ({len(p.team)}/3)*\n*{b['name']}* ({ELEMS[b['element']]}) — `{b['g']} G`"
+        team_txt = "\n".join(f"• {b_str(x)} — `{x['g']} G`" for x in p.team)
+        if team_txt: team_txt = f"Твоя команда:\n{team_txt}\n\n"
+        t = f"🛡️ *НАБОР БАКУГАНОВ ({len(p.team)}/3)*\n{team_txt}Боец: *{b_str(b)}*\nСила: `{b['g']} G`"
         kb = [
             [InlineKeyboardButton(text=v[:1], callback_data=f"de_{k}") for k, v in ELEMS.items()],
             [InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")],
-            [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")]
+            [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")],
+            QUIT_BTN
         ]
     elif p.stage == 'gate':
         vg = p.valid_gates()
         c = vg[p.d_idx % len(vg)]
-        t = f"🎴 *ДОБОР КАРТ ВОРОТ ({len(p.gates)}/3)*\n_(Под стихии твоих бойцов)_\n*{c['name']}* [{ELEMS.get(c['elem'], 'Любая')}] — _{c['desc']}_"
-        kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")]]
+        t = f"🎴 *ДОБОР КАРТ ВОРОТ ({len(p.gates)}/3)*\n_(Под стихии твоих бойцов)_\n\nКарта: *{c['name']}* [{ELEMS.get(c['elem'], 'Универсальная')}]\nЭффект: _{c['desc']}_"
+        kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")], QUIT_BTN]
     else:
         va = p.valid_abils()
         a = va[p.d_idx % len(va)]
-        t = f"✨ *ДОБОР СПОСОБНОСТЕЙ ({len(p.abils)}/3)*\n_(Под стихии твоих бойцов)_\n*{a['name']}* [{ELEMS.get(a['elem'], 'Любая')}]"
-        kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")]]
+        t = f"✨ *ДОБОР СПОСОБНОСТЕЙ ({len(p.abils)}/3)*\n_(Под стихии твоих бойцов)_\n\nКарта: *{a['name']}* [{ELEMS.get(a['elem'], 'Универсальная')}]\nОписание: _{a['desc']}_"
+        kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")], QUIT_BTN]
     return t, InlineKeyboardMarkup(inline_keyboard=kb)
 
 async def start_or_draft(gm: Game, prefix=""):
@@ -177,7 +184,8 @@ async def start_or_draft(gm: Game, prefix=""):
         gm.phase = 'gate'
         for p in (p1, p2):
             if p.is_bot: continue
-            kb = [[InlineKeyboardButton(text=g['name'], callback_data=f"sg_{i}")] for i, g in enumerate(p.gates)]
+            kb = [[InlineKeyboardButton(text=f"{g['name']} ({g['desc']})", callback_data=f"sg_{i}")] for i, g in enumerate(p.gates)]
+            kb.append(QUIT_BTN)
             await upd(p, f"{prefix}🎴 *Установи Карту Ворот взакрытую:*", InlineKeyboardMarkup(inline_keyboard=kb))
     else:
         gm.phase = 'draft'
@@ -185,9 +193,9 @@ async def start_or_draft(gm: Game, prefix=""):
             if p.is_bot: continue
             if p.stage != 'ready':
                 t, k = draft_kb(p)
-                await upd(p, f"{prefix}🔄 *Карты закончились! Набери новые:*\n\n{t}", k)
+                await upd(p, f"{prefix}🔄 *Нужен добор карт:*\n\n{t}", k)
             else:
-                await upd(p, f"{prefix}⏳ Ждем, пока соперник доберет карты...")
+                await upd(p, f"{prefix}⏳ Ждем, пока соперник наберет карты...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
 
 async def run_round(gm: Game):
     p1, p2 = gm.p1, gm.p2
@@ -197,8 +205,9 @@ async def run_round(gm: Game):
             gm.phase, p1.done, p2.done = 'baku', False, False
             for p in (p1, p2):
                 if p.is_bot: continue
-                kb = [[InlineKeyboardButton(text=f"{b['name']} ({b['g']}G)", callback_data=f"sb_{i}")] for i, b in enumerate(p.team)]
-                await upd(p, "👾 *Брось бакугана взакрытую:*", InlineKeyboardMarkup(inline_keyboard=kb))
+                kb = [[InlineKeyboardButton(text=f"{b_str(b)} — {b['g']} G", callback_data=f"sb_{i}")] for i, b in enumerate(p.team)]
+                kb.append(QUIT_BTN)
+                await upd(p, "👾 *Выбери и брось бакугана взакрытую:*", InlineKeyboardMarkup(inline_keyboard=kb))
     elif gm.phase == 'baku':
         if p1.done and (p2.done or p2.is_bot):
             if p2.is_bot: p2.baku = random.choice(p2.team)
@@ -207,13 +216,13 @@ async def run_round(gm: Game):
     elif gm.phase == 'tactics':
         if p2.is_bot and not p2.done:
             if p2.abils and random.choice([True, False]):
-                a = p2.abils.pop(0); p2.used_abils.append(a); p2.hp = min(1000, p2.hp + a['h']); p2.act_text = f"сыграл {a['name']}"
+                a = p2.abils.pop(0); p2.used_abils.append(a); p2.hp = min(1000, p2.hp + a['h']); p2.act_text = f"сыграл «{a['name']}» ({a['desc']})"
             elif p2.gate and not p2.gate_on:
-                p2.gate_on = True; p2.act_text = f"открыл {p2.gate['name']}"
-            else: p2.act_text = "пасс"
+                p2.gate_on = True; p2.act_text = f"открыл «{p2.gate['name']}» ({p2.gate['desc']})"
+            else: p2.act_text = "пропустил шаг"
             p2.done = True
         if p1.done and p2.done:
-            txt = f"⚡ *Шаг {gm.step}:*\n• {p1.name}: {p1.act_text}\n• {p2.name}: {p2.act_text}\n\n"
+            txt = f"⚡ *Итог шага {gm.step}:*\n• {p1.name}: {p1.act_text}\n• {p2.name}: {p2.act_text}\n\n"
             if gm.step < 3:
                 gm.step += 1; p1.done, p2.done = False, False
                 await next_step(gm, txt)
@@ -223,10 +232,10 @@ async def run_round(gm: Game):
                 if g1 > g2: p2.hp = max(0, p2.hp - dmg); res = f"🏆 Раунд за {p1.name}! Урон: `{dmg}`"
                 elif g2 > g1: p1.hp = max(0, p1.hp - dmg); res = f"🏆 Раунд за {p2.name}! Урон: `{dmg}`"
                 else: res = "🤝 Ничья!"
-                res = f"{txt}🏁 *Итог ({g1}G vs {g2}G):* {res}\n❤️ HP: {p1.name} `{p1.hp}` | {p2.name} `{p2.hp}`\n\n"
+                res = f"{txt}🏁 *Финал раунда ({g1}G vs {g2}G):* {res}\n❤️ HP: {p1.name} `{p1.hp}` | {p2.name} `{p2.hp}`\n\n"
                 if p1.hp <= 0 or p2.hp <= 0:
                     win = p1.name if p2.hp <= 0 else p2.name
-                    for p in (p1, p2): await upd(p, f"{res}👑 *ПОБЕДИЛ {win}!*", InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🔄 В меню", callback_data="menu")]]))
+                    for p in (p1, p2): await upd(p, f"{res}👑 *ПОБЕДИЛ {win}!*", InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🔄 В главное меню", callback_data="menu")]]))
                     games.pop(gm.rid, None); return
                 p1.reset_round(); p2.reset_round()
                 await start_or_draft(gm, res)
@@ -234,10 +243,18 @@ async def run_round(gm: Game):
 async def next_step(gm: Game, prefix=""):
     for p, opp in ((gm.p1, gm.p2), (gm.p2, gm.p1)):
         if p.is_bot: continue
-        kb = [[InlineKeyboardButton(text=f"✨ {a['name']}", callback_data=f"sa_{i}")] for i, a in enumerate(p.abils)]
-        if p.gate and not p.gate_on: kb.append([InlineKeyboardButton(text="💥 Открыть Ворота", callback_data="s_open")])
-        kb.append([InlineKeyboardButton(text="⏩ Пасс", callback_data="s_pass")])
-        await upd(p, f"{prefix}⚔️ *Шаг {gm.step}/3*\n🟢 {p.baku['name']}: `{get_g(p,opp)}G` | 🔴 {opp.baku['name']}: `{get_g(opp,p)}G`", InlineKeyboardMarkup(inline_keyboard=kb))
+        kb = [[InlineKeyboardButton(text=f"✨ {a['name']} ({a['desc']})", callback_data=f"sa_{i}")] for i, a in enumerate(p.abils)]
+        if p.gate and not p.gate_on: kb.append([InlineKeyboardButton(text=f"💥 Открыть Ворота: {p.gate['name']}", callback_data="s_open")])
+        kb.append([InlineKeyboardButton(text="⏩ Пропустить шаг (Пасс)", callback_data="s_pass")])
+        kb.append(QUIT_BTN)
+        info = (
+            f"{prefix}⚔️ *ТАКТИЧЕСКИЙ БОЙ (Шаг {gm.step}/3)*\n"
+            f"🟢 Ты ({p.name}) — HP: `{p.hp}`\n"
+            f"Боец: *{b_str(p.baku)}* | Сила: `{get_g(p,opp)} G`\n\n"
+            f"🔴 Враг ({opp.name}) — HP: `{opp.hp}`\n"
+            f"Боец: *{b_str(opp.baku)}* | Сила: `{get_g(opp,p)} G`"
+        )
+        await upd(p, info, InlineKeyboardMarkup(inline_keyboard=kb))
 
 @router.message(CommandStart())
 async def st(m: Message, command: CommandObject = None):
@@ -249,8 +266,22 @@ async def st(m: Message, command: CommandObject = None):
         t, k = draft_kb(gm.p1); await upd(gm.p1, t, k)
         t, k = draft_kb(gm.p2); await upd(gm.p2, t, k)
         return
-    kb = [[InlineKeyboardButton(text="⚔️ С Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Создать PvP", callback_data="m_pvp")]]
-    await m.answer("🔥 *АРЕНА БАКУГАН*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
+    kb = [[InlineKeyboardButton(text="⚔️ Играть с Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Играть с кентом (PvP)", callback_data="m_pvp")]]
+    await m.answer("🔥 *АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
+
+@router.callback_query(F.data == "quit")
+async def cb_quit(c: CallbackQuery):
+    await c.answer("Вы вышли из матча")
+    rid = user_game.pop(c.from_user.id, None)
+    if rid and rid in games:
+        gm = games.pop(rid)
+        opp = gm.p2 if gm.p1.uid == c.from_user.id else gm.p1
+        if opp and not opp.is_bot:
+            user_game.pop(opp.uid, None)
+            kb = [[InlineKeyboardButton(text="🔄 В меню", callback_data="menu")]]
+            await upd(opp, "🏳️ *Соперник покинул игру! Победа за тобой!*", InlineKeyboardMarkup(inline_keyboard=kb))
+    kb = [[InlineKeyboardButton(text="⚔️ Играть с Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Играть с кентом (PvP)", callback_data="m_pvp")]]
+    await c.message.edit_text("🔥 *АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
 
 @router.callback_query(F.data.in_(["m_bot", "m_pvp", "menu"]))
 async def cb_m(c: CallbackQuery):
@@ -266,10 +297,10 @@ async def cb_m(c: CallbackQuery):
         gm = Game(rid, Player(c.from_user.id, c.from_user.full_name))
         games[rid] = gm; user_game[c.from_user.id] = rid
         gm.p1.mid = c.message.message_id
-        await c.message.edit_text(f"👥 Ссылка для кента:\n`https://t.me/{BOT_NAME}?start={rid}`\nЖдем подключения...", parse_mode="Markdown")
+        await c.message.edit_text(f"👥 *Комната создана!*\nПерешли ссылку кенту:\n`https://t.me/{BOT_NAME}?start={rid}`\n\n⏳ Ждем подключения...", reply_markup=InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]), parse_mode="Markdown")
     else:
-        kb = [[InlineKeyboardButton(text="⚔️ С Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Создать PvP", callback_data="m_pvp")]]
-        await c.message.edit_text("🔥 *АРЕНА БАКУГАН*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
+        kb = [[InlineKeyboardButton(text="⚔️ Играть с Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Играть с кентом (PvP)", callback_data="m_pvp")]]
+        await c.message.edit_text("🔥 *АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
 
 @router.callback_query(F.data.startswith("de_"))
 async def cb_de(c: CallbackQuery):
@@ -304,71 +335,4 @@ async def cb_dnav(c: CallbackQuery):
             if item not in p.gates: p.gates.append(item)
             if len(p.gates) >= 3: p.d_idx = 0; p.check_stage()
         elif p.stage == 'abil':
-            va = p.valid_abils()
-            item = va[p.d_idx % len(va)]
-            if item not in p.abils: p.abils.append(item)
-            if len(p.abils) >= 3: p.d_idx = 0; p.check_stage()
-
-    if p.stage == 'ready':
-        await start_or_draft(gm)
-    else:
-        t, k = draft_kb(p); await upd(p, t, k)
-
-@router.callback_query(F.data.startswith("sg_"))
-async def cb_sg(c: CallbackQuery):
-    await c.answer()
-    gm = games.get(user_game.get(c.from_user.id))
-    if not gm: return
-    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
-    p.gate = p.gates.pop(int(c.data[3:])); p.done = True
-    await upd(p, "🎴 Ворота установлены! Ждем соперника...")
-    await run_round(gm)
-
-@router.callback_query(F.data.startswith("sb_"))
-async def cb_sb(c: CallbackQuery):
-    await c.answer()
-    gm = games.get(user_game.get(c.from_user.id))
-    if not gm: return
-    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
-    p.baku = p.team[int(c.data[3:])]; p.done = True
-    await upd(p, f"👾 Брошен *{p.baku['name']}*! Ждем соперника...")
-    await run_round(gm)
-
-@router.callback_query(F.data.startswith("sa_"))
-async def cb_sa(c: CallbackQuery):
-    await c.answer()
-    gm = games.get(user_game.get(c.from_user.id))
-    if not gm: return
-    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
-    a = p.abils.pop(int(c.data[3:]))
-    p.used_abils.append(a); p.hp = min(1000, p.hp + a['h']); p.act_text = f"сыграл {a['name']}"; p.done = True
-    await upd(p, "✨ Карта сыграна! Ждем соперника...")
-    await run_round(gm)
-
-@router.callback_query(F.data == "s_open")
-async def cb_so(c: CallbackQuery):
-    await c.answer()
-    gm = games.get(user_game.get(c.from_user.id))
-    if not gm: return
-    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
-    p.gate_on, p.act_text, p.done = True, f"открыл {p.gate['name']}", True
-    await upd(p, "💥 Ворота открыты! Ждем соперника...")
-    await run_round(gm)
-
-@router.callback_query(F.data == "s_pass")
-async def cb_sp(c: CallbackQuery):
-    await c.answer()
-    gm = games.get(user_game.get(c.from_user.id))
-    if not gm: return
-    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
-    p.act_text, p.done = "пасс", True
-    await upd(p, "⏩ Пасс! Ждем соперника...")
-    await run_round(gm)
-
-async def main():
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
-
-if __name__ == '__main__':
-    asyncio.run(main())
-    
+        
