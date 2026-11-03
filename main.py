@@ -59,8 +59,8 @@ GATES = [
     {'name': 'Бездна Аквоса', 'elem': 'Aquos', 'g': 180, 'desc': 'Дает +180 G бакугану Аквоса'},
     {'name': 'Священный Свет', 'elem': 'Haos', 'g': 280, 'desc': 'Дает +280 G бакугану Хаоса'},
     {'name': 'Сияние Хаоса', 'elem': 'Haos', 'g': 200, 'desc': 'Дает +200 G бакугану Хаоса'},
-    {'name': 'Тайфун Ветра', 'elem': 'Ventus', 'g': 230, 'desc': 'Дает +230 G бакугану Вентуса'},
-    {'name': 'Шторм Вентуса', 'elem': 'Ventus', 'g': 190, 'desc': 'Дает +190 G бакугану Вентуса'},
+    {'name': 'Тайфун Ветра', 'elem': 'Ventus', 'g': 230, 'desc': 'Дает +230 G бакугану Вентусу'},
+    {'name': 'Шторм Вентуса', 'elem': 'Ventus', 'g': 190, 'desc': 'Дает +190 G бакугану Вентусу'},
     {'name': 'Гравитация Земли', 'elem': 'Subterra', 'g': 240, 'desc': 'Дает +240 G бакугану Саптеры'},
     {'name': 'Каньон Саптеры', 'elem': 'Subterra', 'g': 200, 'desc': 'Дает +200 G бакугану Саптеры'},
     {'name': 'Зазеркалье Тьмы', 'elem': 'Darkus', 'g': 260, 'desc': 'Дает +260 G бакугану Даркуса'},
@@ -335,4 +335,70 @@ async def cb_dnav(c: CallbackQuery):
             if item not in p.gates: p.gates.append(item)
             if len(p.gates) >= 3: p.d_idx = 0; p.check_stage()
         elif p.stage == 'abil':
-        
+            va = p.valid_abils()
+            item = va[p.d_idx % len(va)]
+            if item not in p.abils: p.abils.append(item)
+            if len(p.abils) >= 3: p.d_idx = 0; p.check_stage()
+
+    if p.stage == 'ready':
+        await start_or_draft(gm)
+    else:
+        t, k = draft_kb(p); await upd(p, t, k)
+
+@router.callback_query(F.data.startswith("sg_"))
+async def cb_sg(c: CallbackQuery):
+    await c.answer()
+    gm = games.get(user_game.get(c.from_user.id))
+    if not gm: return
+    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
+    p.gate = p.gates.pop(int(c.data[3:])); p.done = True
+    await upd(p, "🎴 Ворота установлены! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
+    await run_round(gm)
+
+@router.callback_query(F.data.startswith("sb_"))
+async def cb_sb(c: CallbackQuery):
+    await c.answer()
+    gm = games.get(user_game.get(c.from_user.id))
+    if not gm: return
+    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
+    p.baku = p.team[int(c.data[3:])]; p.done = True
+    await upd(p, f"👾 Брошен *{b_str(p.baku)}*! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
+    await run_round(gm)
+
+@router.callback_query(F.data.startswith("sa_"))
+async def cb_sa(c: CallbackQuery):
+    await c.answer()
+    gm = games.get(user_game.get(c.from_user.id))
+    if not gm: return
+    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
+    a = p.abils.pop(int(c.data[3:]))
+    p.used_abils.append(a); p.hp = min(1000, p.hp + a['h']); p.act_text = f"сыграл «{a['name']}» ({a['desc']})"; p.done = True
+    await upd(p, "✨ Карта сыграна! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
+    await run_round(gm)
+
+@router.callback_query(F.data == "s_open")
+async def cb_so(c: CallbackQuery):
+    await c.answer()
+    gm = games.get(user_game.get(c.from_user.id))
+    if not gm: return
+    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
+    p.gate_on, p.act_text, p.done = True, f"открыл «{p.gate['name']}» ({p.gate['desc']})", True
+    await upd(p, "💥 Ворота открыты! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
+    await run_round(gm)
+
+@router.callback_query(F.data == "s_pass")
+async def cb_sp(c: CallbackQuery):
+    await c.answer()
+    gm = games.get(user_game.get(c.from_user.id))
+    if not gm: return
+    p = gm.p1 if gm.p1.uid == c.from_user.id else gm.p2
+    p.act_text, p.done = "пропустил шаг", True
+    await upd(p, "⏩ Пасс! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[QUIT_BTN]))
+    await run_round(gm)
+
+async def main():
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
+if __name__ == '__main__':
+    asyncio.run(main())
