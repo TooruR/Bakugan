@@ -328,4 +328,233 @@ def calculate_current_g(player: PlayerState, opponent: PlayerState):
         elif opp_t == 'flat_sub150':
             base_g -= 150
 
+    # Преимущество стихий
+    if opponent and opponent.chosen_baku:
+        elem1 = player.chosen_baku['element']
+        elem2 = opponent.chosen_baku['element']
+        inversion = (opponent.placed_gate and opponent.gate_activated and opponent.placed_gate.get('type') == 'element_inversion')
+
+        if not inversion:
+            if ELEMENT_ADVANTAGES.get(elem1) == elem2:
+                base_g += 150
+            elif ELEMENT_ADVANTAGES.get(elem2) == elem1:
+                base_g -= 150
+        else:
+            if ELEMENT_ADVANTAGES.get(elem2) == elem1:
+                base_g += 150
+            elif ELEMENT_ADVANTAGES.get(elem1) == elem2:
+                base_g -= 150
+
+    return max(0, base_g)
+
+async def send_or_update(bot: Bot, player: PlayerState, text: str, kb: InlineKeyboardMarkup = None):
+    if player.is_bot:
+        return
+    if player.last_message_id:
+        try:
+            await bot.edit_message_text(chat_id=player.user_id, message_id=player.last_message_id, text=text, reply_markup=kb, parse_mode="Markdown")
+            return
+        except Exception:
+            pass
+    msg = await bot.send_message(player.user_id, text, reply_markup=kb, parse_mode="Markdown")
+    player.last_message_id = msg.message_id
+
+# ---------- Генераторы меню и интерфейса ----------
+def build_main_menu():
+    kb = [
+        [InlineKeyboardButton(text="⚔️ Играть против ИИ", callback_data="menu_vs_bot")],
+        [InlineKeyboardButton(text="👥 Дуэль с кентом (PvP)", callback_data="menu_create_room")],
+        [InlineKeyboardButton(text="📖 База: Списки Бакуганов и Карт", callback_data="menu_catalog")],
+        [InlineKeyboardButton(text="📜 Правила игры", callback_data="menu_rules")]
+    ]
+    return "🔥 **АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ** 🔥\nВыбери действие для старта:", InlineKeyboardMarkup(inline_keyboard=kb)
+
+def build_baku_draft_view(player: PlayerState):
+    filtered = [b for b in BAKUGAANS_POOL if b['element'] == player.draft_element]
+    if player.draft_idx >= len(filtered):
+        player.draft_idx = 0
+    item = filtered[player.draft_idx]
+
+    text = f"🛡️ **ШАГ 1: НАБОР БАКУГАНОВ ({player.name})**\nВыбрано: `{len(player.team_baku)}/3`\n\n"
+    if player.team_baku:
+        text += "Твои бойцы:\n"
+        for b in player.team_baku:
+            text += f"• {b['name']} ({ELEMENTS[b['element']]}) — `{b['g']} G`\n"
+        text += "\n"
+
+    text += f"Выбор: **{item['name']}**\nСтихия: {ELEMENTS[item['element']]}\nСила: `{item['g']} G`"
+
+    kb = [
+        [
+            InlineKeyboardButton(text="🔥", callback_data="elem_Pyrus"),
+            InlineKeyboardButton(text="💧", callback_data="elem_Aquos"),
+            InlineKeyboardButton(text="⚡", callback_data="elem_Haos"),
+            InlineKeyboardButton(text="🍃", callback_data="elem_Ventus"),
+            InlineKeyboardButton(text="🪨", callback_data="elem_Subterra"),
+            InlineKeyboardButton(text="🌑", callback_data="elem_Darkus"),
+        ],
+        [
+            InlineKeyboardButton(text="◀️", callback_data="draft_b_prev"),
+            InlineKeyboardButton(text=f"[ {player.draft_idx + 1}/{len(filtered)} ]", callback_data="noop"),
+            InlineKeyboardButton(text="▶️", callback_data="draft_b_next"),
+        ],
+        [InlineKeyboardButton(text="➕ Взять бакугана", callback_data="draft_b_add")],
+        [InlineKeyboardButton(text="🎲 3 Случайных бойца", callback_data="draft_b_random")],
+        [InlineKeyboardButton(text="🏳️ Выйти в меню", callback_data="quit_match")]
+    ]
+    return text, InlineKeyboardMarkup(inкий Импульс', 'element': 'Haos', 'condition': 'Прибавляет +300 G к вашей силе', 'type': 'flat_300'},
+    {'name': 'Водный Водоворот', 'element': 'Aquos', 'condition': 'Отнимает -150 G у врага', 'type': 'flat_sub150'},
+    {'name': 'Гравитация Земли', 'element': 'Subterra', 'condition': '+200 G бойцу Саптеры', 'type': 'subterra_boost'},
+    {'name': 'Тайфун Ветра', 'element': 'Ventus', 'condition': '+200 G бойцу Вентуса', 'type': 'ventus_boost'}
+]
+
+# Способности привязаны к стихиям (или нейтральные)
+ABILITIES_POOL = [
+    {'name': 'Огненный залп (+180 G)', 'element': 'Pyrus', 'bonus': 180, 'heal': 0},
+    {'name': 'Удар Дракона (+250 G)', 'element': 'Pyrus', 'bonus': 250, 'heal': 0},
+    {'name': 'Водный Барьер (+150 G)', 'element': 'Aquos', 'bonus': 150, 'heal': 0},
+    {'name': 'Лечение Океана (+150 HP)', 'element': 'Aquos', 'bonus': 0, 'heal': 150},
+    {'name': 'Ослепляющий Свет (+160 G)', 'element': 'Haos', 'bonus': 160, 'heal': 0},
+    {'name': 'Очищение (+200 HP)', 'element': 'Haos', 'bonus': 0, 'heal': 200},
+    {'name': 'Штормовой Всплеск (+200 G)', 'element': 'Ventus', 'bonus': 200, 'heal': 0},
+    {'name': 'Удар Воздушного Клинка (+170 G)', 'element': 'Ventus', 'bonus': 170, 'heal': 0},
+    {'name': 'Каменный Панцирь (+220 G)', 'element': 'Subterra', 'bonus': 220, 'heal': 0},
+    {'name': 'Землетрясение (+190 G)', 'element': 'Subterra', 'bonus': 190, 'heal': 0},
+    {'name': 'Теневой Коготь (+220 G)', 'element': 'Darkus', 'bonus': 220, 'heal': 0},
+    {'name': 'Поглощение Тьмы (+100 G, +100 HP)', 'element': 'Darkus', 'bonus': 100, 'heal': 100},
+    {'name': 'Универсальное Усиление (+120 G)', 'element': 'Any', 'bonus': 120, 'heal': 0},
+    {'name': 'Полевой Щит (+100 G, +50 HP)', 'element': 'Any', 'bonus': 100, 'heal': 50}
+]
+
+RULES_TEXT = (
+    "📜 **ПРАВИЛА ИГРЫ «БИТВА БАКУГАН»**\n\n"
+    "1. **Драфт команды:** Сначала выбирается 3 бакугана, затем под их стихии подбираются 3 Карты Ворот и 3 Карты Способностей (вручную или рандомом).\n"
+    "2. **Скрытые ходы:** Игроки делают выбор взакрытую. Оппонент не видит твой ход, пока не сделает свой!\n"
+    "3. **Фазы раунда:**\n"
+    "   • Установка Карты Ворот взакрытую.\n"
+    "   • Бросок Бакугана на поле.\n"
+    "   • 3 Тактических шага (разыгрывание карт или открытие ворот).\n"
+    "4. **Анализ:** После каждого одновременного вскрытия дается 10-секундная тактическая пауза.\n"
+    "5. **Урон:** Разница в G-силе конвертируется в урон по HP (от 250 до 500). Цель: опустить HP врага с 1000 до 0!"
+)
+
+# ---------- Состояние игроков и матча ----------
+class PlayerState:
+    def __init__(self, user_id, name, is_bot=False):
+        self.user_id = user_id
+        self.name = name
+        self.is_bot = is_bot
+        self.hp = 1000
+
+        self.team_baku = []
+        self.gate_hand = []
+        self.ability_hand = []
+
+        # Индексы для драфта
+        self.draft_stage = 'baku' # 'baku' -> 'gate' -> 'ability' -> 'ready'
+        self.draft_element = 'Pyrus'
+        self.draft_idx = 0
+
+        # Выборы раунда
+        self.idx_gate = 0
+        self.idx_baku = 0
+        self.idx_ability = 0
+
+        self.placed_gate = None
+        self.chosen_baku = None
+        self.chosen_abilities = []
+        self.gate_activated = False
+
+        self.action_done = False
+        self.last_action_desc = ""
+        self.last_message_id = None
+
+    def get_team_elements(self):
+        elems = {b['element'] for b in self.team_baku}
+        elems.add('Any')
+        return elems
+
+    def reset_round_selection(self):
+        self.idx_gate = 0
+        self.idx_baku = 0
+        self.idx_ability = 0
+        self.placed_gate = None
+        self.chosen_baku = None
+        self.chosen_abilities = []
+        self.gate_activated = False
+        self.action_done = False
+        self.last_action_desc = ""
+
+class Match:
+    def __init__(self, room_id, p1_id, p1_name, is_bot_match=False):
+        self.room_id = room_id
+        self.is_bot_match = is_bot_match
+        self.phase = 'draft' # draft, gate_phase, baku_phase, tactical_phase, round_end
+        self.sub_turn = 1
+        self.p1 = PlayerState(p1_id, p1_name)
+
+        if is_bot_match:
+            self.p2 = PlayerState(user_id=0, name="🤖 ИИ Бот", is_bot=True)
+            self.p2.team_baku = random.sample(BAKUGAANS_POOL, 3)
+            bot_elems = self.p2.get_team_elements()
+            compat_gates = [c for c in GATE_CARDS_POOL if c['element'] in bot_elems]
+            compat_abils = [c for c in ABILITIES_POOL if c['element'] in bot_elems]
+            self.p2.gate_hand = random.sample(compat_gates, min(3, len(compat_gates)))
+            self.p2.ability_hand = random.sample(compat_abils, min(3, len(compat_abils)))
+            self.p2.draft_stage = 'ready'
+        else:
+            self.p2 = None
+
+    def is_full(self):
+        return self.p2 is not None
+
+    def get_player(self, user_id):
+        if self.p1 and self.p1.user_id == user_id:
+            return self.p1
+        if self.p2 and self.p2.user_id == user_id:
+            return self.p2
+        return None
+
+    def get_opponent(self, user_id):
+        if self.p1 and self.p1.user_id == user_id:
+            return self.p2
+        if self.p2 and self.p2.user_id == user_id:
+            return self.p1
+        return None
+
+matches = {}
+user_active_room = {}
+
+def calculate_current_g(player: PlayerState, opponent: PlayerState):
+    if not player.chosen_baku:
+        return 0
+
+    base_g = player.chosen_baku['g']
+
+    for card in player.chosen_abilities:
+        base_g += card.get('bonus', 0)
+
+    # Карта ворот игрока
+    if player.placed_gate and player.gate_activated:
+        t = player.placed_gate.get('type')
+        if t == 'pyrus_boost':
+            base_g += 250 if player.chosen_baku['element'] == 'Pyrus' else -50
+        elif t == 'flat_300':
+            base_g += 300
+        elif t == 'double_base_g':
+            base_g += player.chosen_baku['g']
+        elif t == 'subterra_boost':
+            if player.chosen_baku['element'] == 'Subterra': base_g += 200
+        elif t == 'ventus_boost':
+            if player.chosen_baku['element'] == 'Ventus': base_g += 200
+
+    # Влияние карты ворот оппонента
+    if opponent and opponent.placed_gate and opponent.gate_activated:
+        opp_t = opponent.placed_gate.get('type')
+        if opp_t == 'nullify_opp_ability':
+            bonus_sum = sum(c.get('bonus', 0) for c in player.chosen_abilities)
+            base_g -= bonus_sum
+        elif opp_t == 'flat_sub150':
+            base_g -= 150
+
     
