@@ -29,7 +29,7 @@ RAW_B = [
     ("Aquos Fear Ripper", "Aquos", 350), ("Aquos Saurus", "Aquos", 360), ("Preyas II", "Aquos", 430),
     ("Elfin", "Aquos", 400), ("Minx Elfin", "Aquos", 520), ("Elico", "Aquos", 500),
     ("Blast Elico", "Aquos", 600), ("Abis Omega", "Aquos", 420), ("Macubass", "Aquos", 620),
-    ("Tigrerra", "Haos", 340), ("Blade Tigrerra", "Haos', 450" if False else "Haos", 450), ("Tentaclear", "Haos", 370),
+    ("Tigrerra", "Haos", 340), ("Blade Tigrerra", "Haos", 450), ("Tentaclear", "Haos", 370),
     ("Haos Hynoid", "Haos", 310), ("Haos Freezer", "Haos", 330), ("Haos Robotallion", "Haos", 350),
     ("Haos Falconeer", "Haos", 320), ("Haos Saurus", "Haos", 360), ("Nemus", "Haos", 450),
     ("Saint Nemus", "Haos", 550), ("Mega Brontes", "Haos", 480), ("Alto Brontes", "Haos", 560),
