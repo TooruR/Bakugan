@@ -6,6 +6,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 
 TOKEN = os.getenv("BOTTOKEN", "8947362428:AAFMBUvYa_l3ThqiJrt24zKDOxxKjhZS9H8")
 BOT_NAME = "bakugangame_bot"
+NL = chr(10)
 
 web_app = Flask('')
 @web_app.route('/')
@@ -101,7 +102,7 @@ return f"{b['name']} ({ELEMS[b['element']]}) [{b['season']}]"
 
 class Player:
 def __init__(self, uid, name, is_bot=False):
-self.uid, https://www.google.com/url?q=http://self.name&source=gmail&ust=1793939485762000&sa=E, self.is_bot = uid, name, is_bot
+self.uid, https://www.google.com/url?q=http://self.name&source=gmail&ust=1793940488525000&sa=E, self.is_bot = uid, name, is_bot
 self.hp, self.team, self.gates, self.abils = 1000, [], [], []
 self.d_elem, self.d_idx, self.stage = 'Pyrus', 0, 'baku'
 self.baku, self.gate, self.used_abils, self.gate_on = None, None, [], False
@@ -163,14 +164,8 @@ if p.stage == 'baku':
 cur = [b for b in BAKUGANS if b['element'] == p.d_elem]
 b = cur[p.d_idx % len(cur)]
 lines = [f"• {b_str(x)} — `{x['g']} G`" for x in p.team]
-team_block = "Твоя команда:
-" + "
-".join(lines) + "
-
-" if lines else ""
-t = f"🛡️ *НАБОР БАКУГАНОВ ({len(p.team)}/3)*
-{team_block}Боец: *{b_str(b)}*
-Сила: `{b['g']} G`"
+team_block = "Твоя команда:" + NL + NL.join(lines) + NL + NL if lines else ""
+t = f"🛡️ *НАБОР БАКУГАНОВ ({len(p.team)}/3)*" + NL + team_block + f"Боец: *{b_str(b)}*" + NL + f"Сила: `{b['g']} G`"
 kb = [
 [InlineKeyboardButton(text=v[:1], callback_data=f"de_{k}") for k, v in ELEMS.items()],
 [InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")],
@@ -180,20 +175,12 @@ kb = [
 elif p.stage == 'gate':
 vg = p.valid_gates()
 c = vg[p.d_idx % len(vg)]
-t = f"🎴 *ДОБОР КАРТ ВОРОТ ({len(p.gates)}/3)*
-_(Под стихии твоих бойцов)_
-
-Карта: *{c['name']}* [{ELEMS.get(c['elem'], 'Универсальная')}]
-Эффект: _{c['desc']}_"
+t = f"🎴 *ДОБОР КАРТ ВОРОТ ({len(p.gates)}/3)*" + NL + "_(Под стихии твоих бойцов)_" + NL + NL + f"Карта: *{c['name']}* [{ELEMS.get(c['elem'], 'Универсальная')}]" + NL + f"Эффект: _{c['desc']}_"
 kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")], [QUIT_BTN]]
 else:
 va = p.valid_abils()
 a = va[p.d_idx % len(va)]
-t = f"✨ *ДОБОР СПОСОБНОСТЕЙ ({len(p.abils)}/3)*
-_(Под стихии твоих бойцов)_
-
-Карта: *{a['name']}* [{ELEMS.get(a['elem'], 'Универсальная')}]
-Описание: _{a['desc']}_"
+t = f"✨ *ДОБОР СПОСОБНОСТЕЙ ({len(p.abils)}/3)*" + NL + "_(Под стихии твоих бойцов)_" + NL + NL + f"Карта: *{a['name']}* [{ELEMS.get(a['elem'], 'Универсальная')}]" + NL + f"Описание: _{a['desc']}_"
 kb = [[InlineKeyboardButton(text="◀️", callback_data="dp"), InlineKeyboardButton(text="➕ Взять", callback_data="da"), InlineKeyboardButton(text="▶️", callback_data="dn")], [InlineKeyboardButton(text="🎲 Случайно", callback_data="dr")], [QUIT_BTN]]
 return t, InlineKeyboardMarkup(inline_keyboard=kb)
 
@@ -215,9 +202,7 @@ for p in (p1, p2):
 if p.is_bot: continue
 if p.stage != 'ready':
 t, k = draft_kb(p)
-await upd(p, f"{prefix}🔄 *Нужен добор карт:*
-
-{t}", k)
+await upd(p, f"{prefix}🔄 *Нужен добор карт:*" + NL + NL + t, k)
 else:
 await upd(p, f"{prefix}⏳ Ждем, пока соперник наберет карты...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
 
@@ -246,26 +231,19 @@ p2.gate_on = True; p2.act_text = f"открыл «{p2.gate['name']}» ({p2.gate[
 else: p2.act_text = "пропустил шаг"
 p2.done = True
 if p1.done and p2.done:
-txt = f"⚡ *Итог шага {gm.step}:*
-• {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793939485762000&sa=E}: {p1.act_text}
-• {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793939485762000&sa=E}: {p2.act_text}
-
-"
+txt = f"⚡ *Итог шага {gm.step}:*" + NL + f"• {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793940488525000&sa=E}: {p1.act_text}" + NL + f"• {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793940488525000&sa=E}: {p2.act_text}" + NL + NL
 if gm.step < 3:
 gm.step += 1; p1.done, p2.done = False, False
 await next_step(gm, txt)
 else:
 g1, g2 = get_g(p1, p2), get_g(p2, p1)
 dmg = min(500, max(250, abs(g1 - g2)))
-if g1 > g2: p2.hp = max(0, p2.hp - dmg); res = f"🏆 Раунд за {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793939485762000&sa=E}! Урон: `{dmg}`"
-elif g2 > g1: p1.hp = max(0, p1.hp - dmg); res = f"🏆 Раунд за {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793939485762000&sa=E}! Урон: `{dmg}`"
+if g1 > g2: p2.hp = max(0, p2.hp - dmg); res = f"🏆 Раунд за {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793940488525000&sa=E}! Урон: `{dmg}`"
+elif g2 > g1: p1.hp = max(0, p1.hp - dmg); res = f"🏆 Раунд за {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793940488525000&sa=E}! Урон: `{dmg}`"
 else: res = "🤝 Ничья!"
-res = f"{txt}🏁 *Финал раунда ({g1}G vs {g2}G):* {res}
-❤️ HP: {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793939485762000&sa=E} `{p1.hp}` | {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793939485762000&sa=E} `{p2.hp}`
-
-"
+res = txt + f"🏁 *Финал раунда ({g1}G vs {g2}G):* {res}" + NL + f"❤️ HP: {https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793940488525000&sa=E} `{p1.hp}` | {https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793940488525000&sa=E} `{p2.hp}`" + NL + NL
 if p1.hp <= 0 or p2.hp <= 0:
-win = https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793939485762000&sa=E if p2.hp <= 0 else https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793939485762000&sa=E
+win = https://www.google.com/url?q=http://p1.name&source=gmail&ust=1793940488525000&sa=E if p2.hp <= 0 else https://www.google.com/url?q=http://p2.name&source=gmail&ust=1793940488525000&sa=E
 for p in (p1, p2): await upd(p, f"{res}👑 *ПОБЕДИЛ {win}!*", InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🔄 В главное меню", callback_data="menu")]]))
 games.pop(gm.rid, None); return
 p1.reset_round(); p2.reset_round()
@@ -278,18 +256,7 @@ kb = [[InlineKeyboardButton(text=f"✨ {a['name']} ({a['desc']})", callback_data
 if p.gate and not p.gate_on: kb.append([InlineKeyboardButton(text=f"💥 Открыть Ворота: {p.gate['name']}", callback_data="s_open")])
 kb.append([InlineKeyboardButton(text="⏩ Пропустить шаг (Пасс)", callback_data="s_pass")])
 kb.append([QUIT_BTN])
-info = (
-f"{prefix}⚔️ *ТАКТИЧЕСКИЙ БОЙ (Шаг {gm.step}/3)*
-"
-f"🟢 Ты ({https://www.google.com/url?q=http://p.name&source=gmail&ust=1793939485762000&sa=E}) — HP: `{p.hp}`
-"
-f"Боец: *{b_str(p.baku)}* | Сила: `{get_g(p,opp)} G`
-
-"
-f"🔴 Враг ({https://www.google.com/url?q=http://opp.name&source=gmail&ust=1793939485762000&sa=E}) — HP: `{opp.hp}`
-"
-f"Боец: *{b_str(opp.baku)}* | Сила: `{get_g(opp,p)} G`"
-)
+info = prefix + f"⚔️ *ТАКТИЧЕСКИЙ БОЙ (Шаг {gm.step}/3)*" + NL + f"🟢 Ты ({https://www.google.com/url?q=http://p.name&source=gmail&ust=1793940488525000&sa=E}) — HP: `{p.hp}`" + NL + f"Боец: *{b_str(p.baku)}* | Сила: `{get_g(p,opp)} G`" + NL + NL + f"🔴 Враг ({https://www.google.com/url?q=http://opp.name&source=gmail&ust=1793940488525000&sa=E}) — HP: `{opp.hp}`" + NL + f"Боец: *{b_str(opp.baku)}* | Сила: `{get_g(opp,p)} G`"
 await upd(p, info, InlineKeyboardMarkup(inline_keyboard=kb))
 
 @router.message(CommandStart())
@@ -297,8 +264,8 @@ async def st(m: Message, command: CommandObject = None):
 args = command.args if command else None
 if args and args in games and not games[args].p2:
 gm = games[args]
-gm.p2 = Player(https://www.google.com/url?q=http://m.from_user.id&source=gmail&ust=1793939485763000&sa=E, m.from_user.full_name)
-user_game[https://www.google.com/url?q=http://m.from_user.id&source=gmail&ust=1793939485763000&sa=E] = args
+gm.p2 = Player(https://www.google.com/url?q=http://m.from_user.id&source=gmail&ust=1793940488525000&sa=E, m.from_user.full_name)
+user_game[https://www.google.com/url?q=http://m.from_user.id&source=gmail&ust=1793940488525000&sa=E] = args
 t, k = draft_kb(gm.p1); await upd(gm.p1, t, k)
 t, k = draft_kb(gm.p2); await upd(gm.p2, t, k)
 return
@@ -308,10 +275,10 @@ await m.answer("🔥 *АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ*", repl
 @router.callback_query(F.data == "quit")
 async def cb_quit(c: CallbackQuery):
 await c.answer("Вы вышли из матча")
-rid = user_game.pop(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E, None)
+rid = user_game.pop(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E, None)
 if rid and rid in games:
 gm = games.pop(rid)
-opp = gm.p2 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p1
+opp = gm.p2 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E else gm.p1
 if opp and not opp.is_bot:
 user_game.pop(opp.uid, None)
 kb = [[InlineKeyboardButton(text="🔄 В меню", callback_data="menu")]]
@@ -324,38 +291,34 @@ async def cb_m(c: CallbackQuery):
 await c.answer()
 if c.data == "m_bot":
 rid = str(uuid.uuid4())[:8]
-gm = Game(rid, Player(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E, c.from_user.full_name), True)
-games[rid] = gm; user_game[https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E] = rid
+gm = Game(rid, Player(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E, c.from_user.full_name), True)
+games[rid] = gm; user_game[https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E] = rid
 gm.p1.mid = c.message.message_id
 t, k = draft_kb(gm.p1); await upd(gm.p1, t, k)
 elif c.data == "m_pvp":
 rid = str(uuid.uuid4())[:6]
-gm = Game(rid, Player(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E, c.from_user.full_name))
-games[rid] = gm; user_game[https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E] = rid
+gm = Game(rid, Player(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E, c.from_user.full_name))
+games[rid] = gm; user_game[https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E] = rid
 gm.p1.mid = c.message.message_id
-await c.message.edit_text(f"👥 *Комната создана!*
-Перешли код кенту: `{rid}`
-Или напиши ему ввести: `/start {rid}`
-
-⏳ Ждем подключения...", reply_markup=InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]), parse_mode="Markdown")
+await c.message.edit_text(f"👥 *Комната создана!*" + NL + f"Перешли код кенту: `{rid}`" + NL + f"Или напиши ему ввести: `/start {rid}`" + NL + NL + "⏳ Ждем подключения...", reply_markup=InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]), parse_mode="Markdown")
 else:
 kb = [[InlineKeyboardButton(text="⚔️ Играть с Ботом", callback_data="m_bot")], [InlineKeyboardButton(text="👥 Играть с кентом (PvP)", callback_data="m_pvp")]]
 await c.message.edit_text("🔥 *АРЕНА БАКУГАН: ГЛАВНОЕ МЕНЮ*", reply_markup=InlineKeyboardMarkup(inline_keyboard=kb), parse_mode="Markdown")
 
 @router.callback_query(F.data.startswith("de_"))
 async def cb_de(c: CallbackQuery):
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488525000&sa=E else gm.p2
 p.d_elem, p.d_idx = c.data[3:], 0
 t, k = draft_kb(p); await upd(p, t, k)
 
 @router.callback_query(F.data.in_(["dp", "dn", "da", "dr"]))
 async def cb_dnav(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 if c.data == "dp": p.d_idx -= 1
 elif c.data == "dn": p.d_idx += 1
 elif c.data == "dr":
@@ -388,9 +351,9 @@ t, k = draft_kb(p); await upd(p, t, k)
 @router.callback_query(F.data.startswith("sg_"))
 async def cb_sg(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 p.gate = p.gates.pop(int(c.data[3:])); p.done = True
 await upd(p, "🎴 Ворота установлены! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
 await run_round(gm)
@@ -398,9 +361,9 @@ await run_round(gm)
 @router.callback_query(F.data.startswith("sb_"))
 async def cb_sb(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 p.baku = p.team[int(c.data[3:])]; p.done = True
 await upd(p, f"👾 Брошен *{b_str(p.baku)}*! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
 await run_round(gm)
@@ -408,9 +371,9 @@ await run_round(gm)
 @router.callback_query(F.data.startswith("sa_"))
 async def cb_sa(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 a = p.abils.pop(int(c.data[3:]))
 p.used_abils.append(a); p.hp = min(1000, p.hp + a['h']); p.act_text = f"сыграл «{a['name']}» ({a['desc']})"; p.done = True
 await upd(p, "✨ Карта сыграна! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
@@ -419,9 +382,9 @@ await run_round(gm)
 @router.callback_query(F.data == "s_open")
 async def cb_so(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 p.gate_on, p.act_text, p.done = True, f"открыл «{p.gate['name']}» ({p.gate['desc']})", True
 await upd(p, "💥 Ворота открыты! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
 await run_round(gm)
@@ -429,9 +392,9 @@ await run_round(gm)
 @router.callback_query(F.data == "s_pass")
 async def cb_sp(c: CallbackQuery):
 await c.answer()
-gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E))
+gm = games.get(user_game.get(https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E))
 if not gm: return
-p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793939485763000&sa=E else gm.p2
+p = gm.p1 if gm.p1.uid == https://www.google.com/url?q=http://c.from_user.id&source=gmail&ust=1793940488526000&sa=E else gm.p2
 p.act_text, p.done = "пропустил шаг", True
 await upd(p, "⏩ Пасс! Ждем соперника...", InlineKeyboardMarkup(inline_keyboard=[[QUIT_BTN]]))
 await run_round(gm)
